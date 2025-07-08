@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Tesseract from 'tesseract.js';
 import './App.css';
 
@@ -8,7 +8,35 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('eng');
+  const [imageHistory, setImageHistory] = useState([]);
+  const [error, setError] = useState('');
+  const [copySuccess, setCopySuccess] = useState(false);
   const fileInputRef = useRef(null);
+
+  // Language options for Tesseract.js
+  const languages = [
+    { code: 'eng', name: 'English' },
+    { code: 'spa', name: 'Spanish' },
+    { code: 'fra', name: 'French' },
+    { code: 'deu', name: 'German' },
+    { code: 'ita', name: 'Italian' },
+    { code: 'por', name: 'Portuguese' },
+    { code: 'rus', name: 'Russian' },
+    { code: 'jpn', name: 'Japanese' },
+    { code: 'chi_sim', name: 'Chinese (Simplified)' },
+    { code: 'ara', name: 'Arabic' },
+    { code: 'hin', name: 'Hindi' },
+    { code: 'kor', name: 'Korean' }
+  ];
+
+  // Load image history from localStorage on component mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('textifyHistory');
+    if (savedHistory) {
+      setImageHistory(JSON.parse(savedHistory));
+    }
+  }, []);
 
   const handleImageUpload = (file) => {
     if (file && file.type.startsWith('image/')) {
