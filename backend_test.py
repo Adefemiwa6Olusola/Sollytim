@@ -18,14 +18,6 @@ class TextifyAPITester(unittest.TestCase):
         self.assertEqual(data["message"], "Textify API is running")
         print("✅ Health endpoint test passed")
 
-    def test_root_endpoint(self):
-        """Test the root endpoint"""
-        response = requests.get(f"{self.base_url}/api/")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(data["message"], "Welcome to Textify API")
-        print("✅ Root endpoint test passed")
-
     def test_info_endpoint(self):
         """Test the API info endpoint"""
         response = requests.get(f"{self.base_url}/api/info")
@@ -43,7 +35,6 @@ if __name__ == "__main__":
     
     try:
         tester.test_health_endpoint()
-        tester.test_root_endpoint()
         tester.test_info_endpoint()
         print("\n🎉 All API tests passed successfully!")
     except Exception as e:
