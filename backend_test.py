@@ -20,7 +20,7 @@ class TextifyAPITester(unittest.TestCase):
 
     def test_root_endpoint(self):
         """Test the root endpoint"""
-        response = requests.get(f"{self.base_url}/")
+        response = requests.get(f"{self.base_url}/api/")
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(data["message"], "Welcome to Textify API")
