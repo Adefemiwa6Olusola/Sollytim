@@ -179,18 +179,51 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Image Upload Section */}
-          <div className="space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Upload Image</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">Upload Image</h2>
+                <div className="flex items-center space-x-2">
+                  <label htmlFor="language-select" className="text-sm font-medium text-gray-700">
+                    Language:
+                  </label>
+                  <select
+                    id="language-select"
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {languages.map((lang) => (
+                      <option key={lang.code} value={lang.code}>
+                        {lang.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
               
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <svg className="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-red-700 text-sm">{error}</span>
+                  </div>
+                </div>
+              )}
+
               {/* Drag and Drop Area */}
               <div
                 className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${
                   dragOver 
                     ? 'border-blue-500 bg-blue-50' 
+                    : error 
+                    ? 'border-red-300 hover:border-red-400' 
                     : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
                 }`}
                 onDrop={handleDrop}
@@ -257,28 +290,43 @@ function App() {
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Text Output Section */}
-          <div className="space-y-6">
+            {/* Text Output Section */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-gray-800">Extracted Text</h2>
-                {extractedText && (
-                  <button
-                    onClick={copyToClipboard}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                    <span>Copy</span>
-                  </button>
-                )}
+                <div className="flex space-x-2">
+                  {extractedText && (
+                    <>
+                      <button
+                        onClick={copyToClipboard}
+                        className={`px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 ${
+                          copySuccess 
+                            ? 'bg-green-600 text-white' 
+                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                        }`}
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <span>{copySuccess ? 'Copied!' : 'Copy'}</span>
+                      </button>
+                      <button
+                        onClick={downloadText}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span>Download</span>
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Text Display */}
-              <div className="min-h-[400px] border rounded-lg p-4 bg-gray-50">
+              <div className="min-h-[300px] border rounded-lg p-4 bg-gray-50">
                 {isProcessing ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
@@ -307,7 +355,7 @@ function App() {
             {extractedText && (
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Statistics</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">
                       {extractedText.length}
@@ -320,9 +368,73 @@ function App() {
                     </div>
                     <div className="text-sm text-gray-500">Words</div>
                   </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">
+                      {extractedText.split(/\n/).length}
+                    </div>
+                    <div className="text-sm text-gray-500">Lines</div>
+                  </div>
                 </div>
               </div>
             )}
+          </div>
+
+          {/* History Sidebar */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">History</h2>
+                {imageHistory.length > 0 && (
+                  <button
+                    onClick={clearHistory}
+                    className="text-red-600 hover:text-red-800 text-sm"
+                  >
+                    Clear All
+                  </button>
+                )}
+              </div>
+
+              {imageHistory.length === 0 ? (
+                <div className="text-center text-gray-500 py-8">
+                  <svg className="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p>No recent extractions</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {imageHistory.map((item) => (
+                    <div
+                      key={item.id}
+                      className="border rounded-lg p-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                      onClick={() => loadFromHistory(item)}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <img
+                          src={item.image}
+                          alt="Thumbnail"
+                          className="w-12 h-12 object-cover rounded border"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-800 truncate">
+                            {item.fileName}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {languages.find(lang => lang.code === item.language)?.name}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            {new Date(item.timestamp).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-xs text-gray-600 truncate">
+                        {item.text.substring(0, 100)}...
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
