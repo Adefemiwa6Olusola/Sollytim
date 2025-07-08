@@ -32,7 +32,7 @@ function App() {
 
   // Load image history from localStorage on component mount
   useEffect(() => {
-    const savedHistory = localStorage.getItem('textifyHistory');
+    const savedHistory = localStorage.getItem('textsratHistory');
     if (savedHistory) {
       setImageHistory(JSON.parse(savedHistory));
     }
