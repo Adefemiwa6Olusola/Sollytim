@@ -27,7 +27,7 @@ async def health_check():
 # Root endpoint
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Textify API"}
+    return {"message": "Welcome to TextSrat API"}
 
 # API Info endpoint
 @app.get("/api/info")
