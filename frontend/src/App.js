@@ -81,7 +81,7 @@ function App() {
       
       const newHistory = [historyItem, ...imageHistory.slice(0, 4)]; // Keep last 5 items
       setImageHistory(newHistory);
-      localStorage.setItem('textifyHistory', JSON.stringify(newHistory));
+      localStorage.setItem('textsratHistory', JSON.stringify(newHistory));
     })
     .catch(err => {
       console.error('Error:', err);
