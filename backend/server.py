@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = FastAPI(title="Textify API", version="1.0.0")
+app = FastAPI(title="TextSrat API", version="1.0.0")
 
 # CORS configuration
 app.add_middleware(
