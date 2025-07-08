@@ -113,16 +113,47 @@ function App() {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(extractedText);
+    navigator.clipboard.writeText(extractedText).then(() => {
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    }).catch(err => {
+      console.error('Failed to copy text:', err);
+    });
+  };
+
+  const downloadText = () => {
+    if (!extractedText) return;
+    
+    const blob = new Blob([extractedText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `textify-extracted-${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const clearAll = () => {
     setImage(null);
     setExtractedText('');
     setProgress(0);
+    setError('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+  };
+
+  const loadFromHistory = (historyItem) => {
+    setImage(historyItem.image);
+    setExtractedText(historyItem.text);
+    setSelectedLanguage(historyItem.language);
+  };
+
+  const clearHistory = () => {
+    setImageHistory([]);
+    localStorage.removeItem('textifyHistory');
   };
 
   return (
