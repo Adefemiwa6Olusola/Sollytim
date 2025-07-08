@@ -153,7 +153,7 @@ function App() {
 
   const clearHistory = () => {
     setImageHistory([]);
-    localStorage.removeItem('textifyHistory');
+    localStorage.removeItem('textsratHistory');
   };
 
   return (
