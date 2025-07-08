@@ -22,7 +22,7 @@ app.add_middleware(
 # Health check endpoint
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy", "message": "Textify API is running"}
+    return {"status": "healthy", "message": "TextSrat API is running"}
 
 # Root endpoint
 @app.get("/")
