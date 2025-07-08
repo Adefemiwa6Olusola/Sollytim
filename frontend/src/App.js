@@ -40,21 +40,25 @@ function App() {
 
   const handleImageUpload = (file) => {
     if (file && file.type.startsWith('image/')) {
+      setError('');
       const reader = new FileReader();
       reader.onload = (e) => {
         setImage(e.target.result);
-        extractText(e.target.result);
+        extractText(e.target.result, file.name);
       };
       reader.readAsDataURL(file);
+    } else {
+      setError('Please select a valid image file (JPG, PNG, GIF, etc.)');
     }
   };
 
-  const extractText = (imageData) => {
+  const extractText = (imageData, fileName) => {
     setIsProcessing(true);
     setProgress(0);
     setExtractedText('');
+    setError('');
 
-    Tesseract.recognize(imageData, 'eng', {
+    Tesseract.recognize(imageData, selectedLanguage, {
       logger: (m) => {
         if (m.status === 'recognizing text') {
           setProgress(Math.round(m.progress * 100));
@@ -64,9 +68,24 @@ function App() {
     .then(({ data: { text } }) => {
       setExtractedText(text);
       setIsProcessing(false);
+      
+      // Save to history
+      const historyItem = {
+        id: Date.now(),
+        fileName: fileName || 'Unknown',
+        image: imageData,
+        text: text,
+        language: selectedLanguage,
+        timestamp: new Date().toISOString()
+      };
+      
+      const newHistory = [historyItem, ...imageHistory.slice(0, 4)]; // Keep last 5 items
+      setImageHistory(newHistory);
+      localStorage.setItem('textifyHistory', JSON.stringify(newHistory));
     })
     .catch(err => {
       console.error('Error:', err);
+      setError('Failed to extract text from image. Please try again.');
       setIsProcessing(false);
     });
   };
