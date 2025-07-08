@@ -33,7 +33,7 @@ async def root():
 @app.get("/api/info")
 async def api_info():
     return {
-        "name": "Textify API",
+        "name": "TextSrat API",
         "version": "1.0.0",
         "description": "AI-powered text extraction from images",
         "features": [
