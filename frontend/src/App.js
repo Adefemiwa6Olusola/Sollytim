@@ -128,7 +128,7 @@ function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `textify-extracted-${Date.now()}.txt`;
+    a.download = `textsrat-extracted-${Date.now()}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
