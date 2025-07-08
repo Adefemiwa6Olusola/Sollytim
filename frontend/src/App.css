@@ -1,38 +1,116 @@
-.App {
-    text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for better UX */
+.drag-over {
+  @apply border-blue-500 bg-blue-50;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Smooth animations */
+.transition-all {
+  transition: all 0.2s ease-in-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* Custom scrollbar for text area */
+.text-display::-webkit-scrollbar {
+  width: 8px;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.text-display::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
 }
 
-.App-link {
-    color: #61dafb;
+.text-display::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.text-display::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Loading animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Button hover effects */
+.btn-hover {
+  @apply transform hover:scale-105 transition-transform duration-200;
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Image preview styles */
+.image-preview {
+  max-height: 300px;
+  object-fit: contain;
+}
+
+/* Text selection styles */
+.text-selectable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Responsive text */
+@media (max-width: 768px) {
+  .text-display {
+    font-size: 0.875rem;
+  }
+}
+
+/* Focus styles */
+.focus-ring:focus {
+  @apply ring-2 ring-blue-500 ring-offset-2 outline-none;
+}
+
+/* Custom blue theme */
+.text-blue-primary {
+  color: #2563eb;
+}
+
+.bg-blue-primary {
+  background-color: #2563eb;
+}
+
+.border-blue-primary {
+  border-color: #2563eb;
+}
+
+/* Copy button success state */
+.copy-success {
+  @apply bg-green-600 text-white;
+}
+
+/* Error states */
+.error-text {
+  @apply text-red-600;
+}
+
+.error-border {
+  @apply border-red-500;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding: 1rem;
+  }
+  
+  .mobile-text {
+    font-size: 0.875rem;
+  }
 }
